@@ -66,17 +66,6 @@ list_install_components/fast: list_install_components
 
 .PHONY : list_install_components/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target install
 install: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
@@ -88,6 +77,28 @@ install/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
 	/usr/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -122,17 +133,6 @@ install/local/fast: install/local
 
 .PHONY : install/local/fast
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
-
 # The main all target
 all: cmake_check_build_system
 	cd /home/benjamin/catkin_ws/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/benjamin/catkin_ws/build/CMakeFiles /home/benjamin/catkin_ws/build/image/CMakeFiles/progress.marks
@@ -166,66 +166,6 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-image/CMakeFiles/tf_generate_messages_py.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/tf_generate_messages_py.dir/rule
-.PHONY : image/CMakeFiles/tf_generate_messages_py.dir/rule
-
-# Convenience name for target.
-tf_generate_messages_py: image/CMakeFiles/tf_generate_messages_py.dir/rule
-
-.PHONY : tf_generate_messages_py
-
-# fast build rule for target.
-tf_generate_messages_py/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/tf_generate_messages_py.dir/build.make image/CMakeFiles/tf_generate_messages_py.dir/build
-.PHONY : tf_generate_messages_py/fast
-
-# Convenience name for target.
-image/CMakeFiles/tf_generate_messages_eus.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/tf_generate_messages_eus.dir/rule
-.PHONY : image/CMakeFiles/tf_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-tf_generate_messages_eus: image/CMakeFiles/tf_generate_messages_eus.dir/rule
-
-.PHONY : tf_generate_messages_eus
-
-# fast build rule for target.
-tf_generate_messages_eus/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/tf_generate_messages_eus.dir/build.make image/CMakeFiles/tf_generate_messages_eus.dir/build
-.PHONY : tf_generate_messages_eus/fast
-
-# Convenience name for target.
-image/CMakeFiles/tf_generate_messages_cpp.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/tf_generate_messages_cpp.dir/rule
-.PHONY : image/CMakeFiles/tf_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-tf_generate_messages_cpp: image/CMakeFiles/tf_generate_messages_cpp.dir/rule
-
-.PHONY : tf_generate_messages_cpp
-
-# fast build rule for target.
-tf_generate_messages_cpp/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/tf_generate_messages_cpp.dir/build.make image/CMakeFiles/tf_generate_messages_cpp.dir/build
-.PHONY : tf_generate_messages_cpp/fast
-
-# Convenience name for target.
-image/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-.PHONY : image/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_cpp: image/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_cpp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_cpp/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build.make image/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/build
-.PHONY : sensor_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
 image/CMakeFiles/image_reader.dir/rule:
 	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/image_reader.dir/rule
 .PHONY : image/CMakeFiles/image_reader.dir/rule
@@ -241,169 +181,19 @@ image_reader/fast:
 .PHONY : image_reader/fast
 
 # Convenience name for target.
-image/CMakeFiles/tf_generate_messages_nodejs.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/tf_generate_messages_nodejs.dir/rule
-.PHONY : image/CMakeFiles/tf_generate_messages_nodejs.dir/rule
+image/CMakeFiles/image_reader_programming.dir/rule:
+	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/image_reader_programming.dir/rule
+.PHONY : image/CMakeFiles/image_reader_programming.dir/rule
 
 # Convenience name for target.
-tf_generate_messages_nodejs: image/CMakeFiles/tf_generate_messages_nodejs.dir/rule
+image_reader_programming: image/CMakeFiles/image_reader_programming.dir/rule
 
-.PHONY : tf_generate_messages_nodejs
+.PHONY : image_reader_programming
 
 # fast build rule for target.
-tf_generate_messages_nodejs/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/tf_generate_messages_nodejs.dir/build.make image/CMakeFiles/tf_generate_messages_nodejs.dir/build
-.PHONY : tf_generate_messages_nodejs/fast
-
-# Convenience name for target.
-image/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-.PHONY : image/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_py: image/CMakeFiles/sensor_msgs_generate_messages_py.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_py
-
-# fast build rule for target.
-sensor_msgs_generate_messages_py/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/sensor_msgs_generate_messages_py.dir/build.make image/CMakeFiles/sensor_msgs_generate_messages_py.dir/build
-.PHONY : sensor_msgs_generate_messages_py/fast
-
-# Convenience name for target.
-image/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
-.PHONY : image/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_eus: image/CMakeFiles/sensor_msgs_generate_messages_eus.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_eus
-
-# fast build rule for target.
-sensor_msgs_generate_messages_eus/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build.make image/CMakeFiles/sensor_msgs_generate_messages_eus.dir/build
-.PHONY : sensor_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-image/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
-.PHONY : image/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_cpp: image/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/rule
-
-.PHONY : tf2_msgs_generate_messages_cpp
-
-# fast build rule for target.
-tf2_msgs_generate_messages_cpp/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/build.make image/CMakeFiles/tf2_msgs_generate_messages_cpp.dir/build
-.PHONY : tf2_msgs_generate_messages_cpp/fast
-
-# Convenience name for target.
-image/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
-.PHONY : image/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_nodejs: image/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-sensor_msgs_generate_messages_nodejs/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build.make image/CMakeFiles/sensor_msgs_generate_messages_nodejs.dir/build
-.PHONY : sensor_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-image/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-.PHONY : image/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-sensor_msgs_generate_messages_lisp: image/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : sensor_msgs_generate_messages_lisp
-
-# fast build rule for target.
-sensor_msgs_generate_messages_lisp/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build.make image/CMakeFiles/sensor_msgs_generate_messages_lisp.dir/build
-.PHONY : sensor_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-image/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
-.PHONY : image/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_lisp: image/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/rule
-
-.PHONY : tf2_msgs_generate_messages_lisp
-
-# fast build rule for target.
-tf2_msgs_generate_messages_lisp/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/build.make image/CMakeFiles/tf2_msgs_generate_messages_lisp.dir/build
-.PHONY : tf2_msgs_generate_messages_lisp/fast
-
-# Convenience name for target.
-image/CMakeFiles/tf_generate_messages_lisp.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/tf_generate_messages_lisp.dir/rule
-.PHONY : image/CMakeFiles/tf_generate_messages_lisp.dir/rule
-
-# Convenience name for target.
-tf_generate_messages_lisp: image/CMakeFiles/tf_generate_messages_lisp.dir/rule
-
-.PHONY : tf_generate_messages_lisp
-
-# fast build rule for target.
-tf_generate_messages_lisp/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/tf_generate_messages_lisp.dir/build.make image/CMakeFiles/tf_generate_messages_lisp.dir/build
-.PHONY : tf_generate_messages_lisp/fast
-
-# Convenience name for target.
-image/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule
-.PHONY : image/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_nodejs: image/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/rule
-
-.PHONY : tf2_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-tf2_msgs_generate_messages_nodejs/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/build.make image/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/build
-.PHONY : tf2_msgs_generate_messages_nodejs/fast
-
-# Convenience name for target.
-image/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule
-.PHONY : image/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_eus: image/CMakeFiles/tf2_msgs_generate_messages_eus.dir/rule
-
-.PHONY : tf2_msgs_generate_messages_eus
-
-# fast build rule for target.
-tf2_msgs_generate_messages_eus/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/tf2_msgs_generate_messages_eus.dir/build.make image/CMakeFiles/tf2_msgs_generate_messages_eus.dir/build
-.PHONY : tf2_msgs_generate_messages_eus/fast
-
-# Convenience name for target.
-image/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 image/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
-.PHONY : image/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
-
-# Convenience name for target.
-tf2_msgs_generate_messages_py: image/CMakeFiles/tf2_msgs_generate_messages_py.dir/rule
-
-.PHONY : tf2_msgs_generate_messages_py
-
-# fast build rule for target.
-tf2_msgs_generate_messages_py/fast:
-	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/tf2_msgs_generate_messages_py.dir/build.make image/CMakeFiles/tf2_msgs_generate_messages_py.dir/build
-.PHONY : tf2_msgs_generate_messages_py/fast
+image_reader_programming/fast:
+	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/image_reader_programming.dir/build.make image/CMakeFiles/image_reader_programming.dir/build
+.PHONY : image_reader_programming/fast
 
 src/image_reader.o: src/image_reader.cpp.o
 
@@ -432,38 +222,54 @@ src/image_reader.cpp.s:
 	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/image_reader.dir/build.make image/CMakeFiles/image_reader.dir/src/image_reader.cpp.s
 .PHONY : src/image_reader.cpp.s
 
+src/image_reader_programming.o: src/image_reader_programming.cpp.o
+
+.PHONY : src/image_reader_programming.o
+
+# target to build an object file
+src/image_reader_programming.cpp.o:
+	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/image_reader_programming.dir/build.make image/CMakeFiles/image_reader_programming.dir/src/image_reader_programming.cpp.o
+.PHONY : src/image_reader_programming.cpp.o
+
+src/image_reader_programming.i: src/image_reader_programming.cpp.i
+
+.PHONY : src/image_reader_programming.i
+
+# target to preprocess a source file
+src/image_reader_programming.cpp.i:
+	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/image_reader_programming.dir/build.make image/CMakeFiles/image_reader_programming.dir/src/image_reader_programming.cpp.i
+.PHONY : src/image_reader_programming.cpp.i
+
+src/image_reader_programming.s: src/image_reader_programming.cpp.s
+
+.PHONY : src/image_reader_programming.s
+
+# target to generate assembly for a file
+src/image_reader_programming.cpp.s:
+	cd /home/benjamin/catkin_ws/build && $(MAKE) -f image/CMakeFiles/image_reader_programming.dir/build.make image/CMakeFiles/image_reader_programming.dir/src/image_reader_programming.cpp.s
+.PHONY : src/image_reader_programming.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... tf_generate_messages_py"
-	@echo "... tf_generate_messages_eus"
-	@echo "... tf_generate_messages_cpp"
-	@echo "... sensor_msgs_generate_messages_cpp"
-	@echo "... image_reader"
-	@echo "... tf_generate_messages_nodejs"
-	@echo "... sensor_msgs_generate_messages_py"
 	@echo "... list_install_components"
-	@echo "... sensor_msgs_generate_messages_eus"
-	@echo "... tf2_msgs_generate_messages_cpp"
-	@echo "... sensor_msgs_generate_messages_nodejs"
-	@echo "... sensor_msgs_generate_messages_lisp"
-	@echo "... tf2_msgs_generate_messages_lisp"
-	@echo "... tf_generate_messages_lisp"
-	@echo "... edit_cache"
-	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... install"
-	@echo "... tf2_msgs_generate_messages_eus"
-	@echo "... tf2_msgs_generate_messages_py"
+	@echo "... edit_cache"
+	@echo "... test"
+	@echo "... image_reader"
 	@echo "... rebuild_cache"
+	@echo "... image_reader_programming"
 	@echo "... install/strip"
 	@echo "... install/local"
-	@echo "... test"
 	@echo "... src/image_reader.o"
 	@echo "... src/image_reader.i"
 	@echo "... src/image_reader.s"
+	@echo "... src/image_reader_programming.o"
+	@echo "... src/image_reader_programming.i"
+	@echo "... src/image_reader_programming.s"
 .PHONY : help
 
 

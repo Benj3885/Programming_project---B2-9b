@@ -21,11 +21,12 @@ class ImageConverter
   ImageConverter()
     : it(n)
   {
+    depth_sub = it.subscribe("/camera/depth/image_raw", 1, &ImageConverter::depthCb, this);
     rgb_sub = it.subscribe("/camera/rgb/image_raw", 1, &ImageConverter::imageCb, this);
   }
 
-// Tracking location of the pixel a certain color was last seen
-//Ending with R is for red, while Y is for yellow
+  // Tracking location of the pixel a certain color was last seen
+  // Ending with R is for red, while Y is for yellow
   int lastXR = -1;
   int lastYR = -1;
   int lastXY = -1;
@@ -44,6 +45,9 @@ class ImageConverter
   bool redDone = false;
   bool yellowDone = false;
 
+  // Variable for depth image
+  cv::Mat depthImage;
+
   void imageCb(const sensor_msgs::ImageConstPtr& msg)
   {
     //A cv_pointer is created, and it's made to point to the new image
@@ -61,9 +65,13 @@ class ImageConverter
 
     //The pixels with values between scalar1 and scalar2 is set to 255 (white), others are set to 0 (black)
     //Red
-    inRange(HSVImage, cv::Scalar(150, 140, 100), cv::Scalar(200, 200, 255), ThreshImageR);
+    //inRange(HSVImage, cv::Scalar(150, 140, 100), cv::Scalar(200, 200, 255), ThreshImageR);
+
     //Yellow
     inRange(HSVImage, cv::Scalar(15, 100, 120), cv::Scalar(50, 255, 255), ThreshImageY);
+
+    // For seeing a red box in gazebo
+    inRange(HSVImage, cv::Scalar(0, 220, 80), cv::Scalar(10, 255, 255), ThreshImageR);
 
     //This variable is set to have the same size as image for later use
     imageLines = cv::Mat::zeros(image.size(), CV_8UC3);
@@ -119,27 +127,23 @@ class ImageConverter
     float Fc = 577.295;
     //Float to hold value for publishing how much to turn in order to see object
     std_msgs::Float32 turn;
-    turn.data = 0;
+    turn.data = 10;
 
     //If red has been seen, and hasn't been measured before, it will now
     //otherwise, the same will be seen for yellow
     if(red && !redDone){
-      float toTan = lastXR / Fc;
-      turn.data = atan(toTan) * 180 / 3.14591 - 29;
       redTarget = true;
+      turn.data = atan(lastXR / Fc) * 180 / 3.14591 - 29;
       turn_pub.publish(turn);
-      std::cout << turn << "  ||  " << lastXR << std::endl;
     } else if(yellow && !yellowDone){
-      float toTan = lastXY / Fc;
-      turn.data = atan(toTan) * 180 / 3.14591 - 29;
       yellowTarget = true;
+      turn.data = atan(lastXY / Fc) * 180 / 3.14591 - 29;
       turn_pub.publish(turn);
     }
 
     //If the robot is looking at the object to measure, and it has seen a color, it will call depth image
-    if(turn.data > -0.2 && turn.data < 0.2)
-      if(!red && !yellow) //I have no idea why this works, but it somehow does...
-        depth_sub = it.subscribe("/camera/depth/image", 1, &ImageConverter::depthCb, this);
+    if(turn.data > -1 && turn.data < 1)
+      pubInfo();
 
     //The lines are added to the image
     image += imageLines;
@@ -150,28 +154,39 @@ class ImageConverter
 
     //For viewing on screen
     cv::imshow("Image", image);
-    cv::imshow("Y", ThreshImageY);
-    cv::imshow("R", ThreshImageR);
+    // cv::imshow("Y", ThreshImageY);
+    // cv::imshow("R", ThreshImageR);
 
-    //I'm not quite sure how it works, but it's supposed to wait for 3 millisecond or a keystroke
     cv::waitKey(3);
   }
 
   void depthCb(const sensor_msgs::ImageConstPtr &msg)
   {
-    //Same story as before, poiter and image
+    //Same story as before, pointer and image
     cv_bridge::CvImagePtr depth_ptr;
     depth_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::TYPE_32FC1);
-    cv::Mat depthImage = depth_ptr->image;
+    depthImage = depth_ptr->image;
+  }
 
+  void pubInfo()
+  {
     //Variables for publishing are declared
     std_msgs::Float32 dist;
     std_msgs::String color;
 
+    float Fc = 430.222;
+    float hyp = 0;
+    float angle = 0;
+
     //If red is the target
     if(redTarget){
-      //dist is getting the value of the distance to target
-      dist.data = depthImage.at<float>(depthImage.cols / 2, lastYR);
+      // The hypotenuse for the triangle going from:
+      // robot_floor_position -> robot -> object -> robot_floor_position is being found
+      hyp = depthImage.at<float>(depthImage.cols / 2, lastYR);
+      // Angle between hyp and robot_floor_position -> robot is being found
+      angle = atan(lastXY / Fc) * 180 / 3.14591 - 22.5;
+      //dist is found using sin, hyp and angle
+      dist.data = sin(angle) * hyp;
       //color is getting the color red
       color.data = "red";
       // red will no longer be looked for
@@ -183,7 +198,9 @@ class ImageConverter
 
     //Same story as with red
     if(yellowTarget){
-      dist.data = depthImage.at<float>(depthImage.cols / 2, lastYR);
+      hyp = depthImage.at<float>(depthImage.cols / 2, lastYY);
+      angle = atan(lastXY / Fc) * 180 / 3.14591 - 22.5;
+      dist.data = sin(angle) * hyp;
       color.data = "yellow";
       yellowDone = true;
       dist_pub.publish(dist);
