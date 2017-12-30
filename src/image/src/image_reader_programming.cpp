@@ -221,9 +221,11 @@ class ImageConverter
   void bottom(unsigned char colorb){
     cv::Mat inp;
 
+    // Creating variables to store input
     unsigned int inpX = 0;
     unsigned int inpY = 0;
 
+    // Deciding whether the stored inut should be from yellow or red
     if(colorb == 'r'){
       inp = ThreshImageR;
       inpX = xR;
@@ -244,14 +246,19 @@ class ImageConverter
     // Lowering threshold a little due to noise when seeing object
     threshold *= 0.95;
 
+    // Creating variables for the changed x,y coordinates
     unsigned int botX = inpX;
     unsigned int botY = inpY;
+
+    // Creating a counter to count non-zero pixels
     unsigned int x_counter = 0;
+
+    // Creating variables to store the moments of x and y
     unsigned int moment_x = 0;
     unsigned int moment_y = 0;
-    unsigned int diff_count = 0;
 
-    std::cout << inpY << std::endl;
+    // Variable for keeping track of layers with acceptable color underneath, so that botY can move down
+    unsigned int diff_count = 0;
 
     for(unsigned int iy = inpY; iy > 0; iy++){
       x_counter = 0;
@@ -265,9 +272,11 @@ class ImageConverter
         }
       }
 
+      // Checking whether there is insufficient non-zero pixels on row
       if(x_counter < threshold)
         break;
 
+      // Calculating moment_x for current row
       botX = moment_x / x_counter;
 
       diff_count++;
