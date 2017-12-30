@@ -20,8 +20,5 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(center src/center.cpp)
-target_link_libraries(center ${catkin_LIBRARIES})
-
 add_executable(center_programming src/center_programming.cpp)
 target_link_libraries(center_programming ${catkin_LIBRARIES})
