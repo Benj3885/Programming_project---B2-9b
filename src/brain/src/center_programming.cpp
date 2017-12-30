@@ -130,12 +130,12 @@ class brain
   }
 
   void odomCB(const nav_msgs::Odometry::ConstPtr &msg){
+    // Finding the position of the turtlebot
     listener.lookupTransform("/map","/base_link",ros::Time(0), transform);
-
-    std::cout << transform.getOrigin().x() << ", " << transform.getOrigin().y() << std::endl;
 
     // Creating a pose object
     tf::Pose pose;
+
     // Converting a pose msg to pose
     tf::poseMsgToTF(msg->pose.pose, pose);
 
@@ -152,6 +152,7 @@ class brain
   }
 
   void angleCB(const std_msgs::Float32::ConstPtr& msg){
+    // Saving the angle from the turtlebot's camera to the object on the z-plane
     z_angle = msg->data;
   }
 
@@ -171,14 +172,14 @@ class brain
   }
 
   void math(){
-
+    // Making variables for storing information for the math
     float red_x;
     float red_y;
     float red_z;
 
     float yellow_x;
     float yellow_y;
-
+    // Putting the right information into the right Variables
     if(root->type == "red"){
       red_x = root->x;
       red_y = root->y;
@@ -195,19 +196,30 @@ class brain
       red_z = root->next->z;
     }
 
+    // Declaring various variables needed
     float x1 = 0;
     float y0 = red_z * 0.05, y_max = 0;
     float a = 40, t = 0, t_max = 0;
     float v0 = 0, v0x = 0, v0y = 0;
 
+    // Calculating the length on the x,y plane from the red object to the yellow
     x1 = sqrt((red_x - yellow_x)*(red_x - yellow_x) + (red_y - yellow_y)*(red_y - yellow_y)) * 0.05;
 
+    // Doing the math described in the report
     t = sqrt((- y0 - (x1 * tan(a))) / (- 9.82 * 0.5));
     v0 = x1 / (t * cos(a));
     v0x = v0 * cos(a);
     v0y = v0 * sin(a);
     t_max = v0y / 9.82;
     y_max = y0 + (v0y * t_max) - (9.82 * 0.5) * t_max * t_max;
+
+    // Printing the found information
+    std::cout << "v0 = " << v0 << std::endl;
+    std::cout << "v0x = " << v0x << std::endl;
+    std::cout << "v0y = " << v0y << std::endl;
+    std::cout << "angle = " << a << std::endl;
+    std::cout << "t for y_max = " << t_max << std::endl;
+    std::cout << "y_max = " << y_max << std::endl;
   }
 };
 
